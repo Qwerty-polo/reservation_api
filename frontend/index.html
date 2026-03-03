@@ -792,13 +792,18 @@
     // ============================================================
     // ⚙️  КОНФІГУРАЦІЯ API — ВСТАВТЕ СВОЇ ЕНДПОІНТИ СЮДИ
     // ============================================================
-    const API = {
-      /** POST — { email, password } → { access_token, token_type } */
-        LOGIN:  'http://localhost:8000/login',        // 🔑 замініть на свій URL
-        REGISTER:  'http://localhost:8000/register',
+    const API_URL = "https://reservation-api-57jr.onrender.com";
 
-      /** GET  — повертає масив фільмів [ { id, title, genre, rating, duration, poster_url, ... } ] */
-        MOVIES: 'http://localhost:8000/movies',            // 🎬 замініть на свій URL
+    const API = {
+        /** POST — { email, password } → { access_token, is_admin, ... } */
+        LOGIN: `${API_URL}/login`,
+        REGISTER: `${API_URL}/register`,
+
+        /** GET — масив фільмів */
+        MOVIES: `${API_URL}/movies`,
+
+        /** GET — статистика (для адміна) */
+        DASHBOARD: `${API_URL}/admin/dashboard`
     };
 
     // ============================================================
