@@ -62,6 +62,10 @@ app.include_router(tickets_router)
 app.include_router(users_router)
 app.include_router(admin_router)
 
+# Це дозволить серверу "бачити" все, що лежить у папці frontend
+app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
+
 @app.get("/")
 async def read_index():
-    return FileResponse("index.html")
+    # Вказуємо шлях до твого файлу всередині папки frontend
+    return FileResponse(os.path.join("frontend", "index.html"))
