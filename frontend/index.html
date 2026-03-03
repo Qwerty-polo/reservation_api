@@ -839,7 +839,7 @@
             formData.append('username', email);
             formData.append('password', pass);
 
-            const res = await fetch('http://localhost:8000/login', {
+            const res = await fetch(API.LOGIN, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: formData,
@@ -956,7 +956,7 @@ async function submitRegister() {
 
   try {
     // ⚙️ Вставте свій ендпоінт реєстрації
-    const res = await fetch('http://localhost:8000/register', {
+    const res = await fetch(API.REGISTER, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password: pass }),
@@ -1082,39 +1082,13 @@ async function submitRegister() {
     renderError(grid, `cant upload movie.<br><small>${e.message}</small>`);
   }
 }
-async function loadAdminDashboard() {
-  // Якщо немає токена або це не адмін - нічого не робимо
-  if (!authToken || !authIsAdmin) return;
-
-  try {
-    const res = await fetch('http://localhost:8000/admin/dashboard', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${authToken}` // 👈 Пред'являємо пропуск адміна
-      }
-    });
-
-    if (!res.ok) throw new Error('Помилка доступу до адмінки');
-
-    const data = await res.json();
-
-    // Вставляємо цифри з твого бекенду в HTML
-    document.getElementById('statUsers').textContent = data.stats.total_users;
-    document.getElementById('statMovies').textContent = data.stats.total_movies;
-    document.getElementById('statTickets').textContent = data.stats.total_tickets;
-
-  } catch (e) {
-    console.error(e);
-    showToast('Помилка завантаження статистики ❌');
-  }
-}
 //-----------------------------------------
     async function loadAdminDashboard() {
         // Якщо немає токена або це не адмін - нічого не робимо
         if (!authToken || !authIsAdmin) return;
 
         try {
-            const res = await fetch('http://localhost:8000/admin/dashboard', {
+            const res = await fetch(API.DASHBOARD, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}` // 👈 Пред'являємо пропуск адміна
@@ -1154,7 +1128,7 @@ async function loadAdminDashboard() {
 
       } catch (e) {
         console.error(e);
-        renderError(grid, `Не вдалося завантажити фільми.<br><small>${e.message}</small>`);
+        renderError(grid, `cant upload the movies.<br><small>${e.message}</small>`);
       }
     }
 
@@ -1166,7 +1140,7 @@ async function loadAdminDashboard() {
         list.innerHTML = '<p style="color:var(--gold)">Download tickets...</p>';
 
         try {
-            const res = await fetch('http://localhost:8000/my_tickets', {
+            const res = await fetch(`${API_URL}/my_tickets`, {
                 headers: {'Authorization': `Bearer ${authToken}`}
             });
 
@@ -1285,7 +1259,7 @@ async function loadAdminDashboard() {
         sessionsContainer.innerHTML = '<span style="color:var(--gold)">Завантаження сеансів...</span>';
 
         try {
-            const res = await fetch('http://localhost:8000/session');
+            const res = await fetch(`${API_URL}/session`);
             if (!res.ok) throw new Error('Не вдалося завантажити сеанси');
             const allSessions = await res.json();
 
@@ -1359,7 +1333,7 @@ async function loadAdminDashboard() {
         if (!confirmBuy) return;
 
         try {
-            const res = await fetch(`http://localhost:8000/${ticketId}/buy`, {
+            const res = await fetch(`${API_URL}/${ticketId}/buy`, {
                 method: 'POST',
                 headers: {'Authorization': `Bearer ${authToken}`}
             });
