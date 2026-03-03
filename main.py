@@ -1,7 +1,9 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy import select
-
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+import os
 from auth.auth import get_password_hash
 from database.db import engine, Base
 from models import models
@@ -59,3 +61,7 @@ app.include_router(sessions_router)
 app.include_router(tickets_router)
 app.include_router(users_router)
 app.include_router(admin_router)
+
+@app.get("/")
+async def read_index():
+    return FileResponse("index.html")
