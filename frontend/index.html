@@ -1058,29 +1058,28 @@ async function submitRegister() {
     // 🏠  ГОЛОВНА — топ 3
     // ============================================================
     async function loadTopMovies() {
-  const grid = document.getElementById('topMoviesGrid');
-  try {
-    const movies = (await fetchMovies()).map(mapMovie);
+        const grid = document.getElementById('topMoviesGrid');
+        try {
+            const movies = (await fetchMovies()).map(mapMovie);
 
-    // 👇 ОСЬ ТУТ ВПИШИ ID ФІЛЬМІВ, ЯКІ ХОЧЕШ ПОКАЗУВАТИ (наприклад, Бетмен, Павук і Дедпул)
-    const myTopIds = [1, 5, 3];
+            // 👇 НОВА МАГІЯ: Перевертаємо масив (новіші стають першими) і беремо 3 штуки
+            const top3 = movies.reverse().slice(0, 3);
 
-    // Шукаємо у списку фільмів тільки ті, чиї ID є в нашому масиві myTopIds
-    const top3 = movies.filter(m => myTopIds.includes(m.id)).slice(0, 4);
+            grid.innerHTML = '';
+            if (!top3.length) {
+                grid.innerHTML = `<div class="state-box" style="grid-column:1/-1"><div class="state-icon">🎬</div><p>Dont have movie yet</p></div>`;
+                return;
+            }
+            top3.forEach(m => grid.appendChild(renderCard(m)));
 
-    grid.innerHTML = '';
-    if (!top3.length) {
-      grid.innerHTML = `<div class="state-box" style="grid-column:1/-1"><div class="state-icon">🎬</div><p>Dont have movie yet</p></div>`;
-      return;
+            // Трохи змінив текст, щоб було логічніше (можеш повернути Best, якщо хочеш)
+            document.getElementById('topCount').textContent = `Newest ${top3.length}`;
+
+        } catch (e) {
+            console.error(e);
+            renderError(grid, `cant upload movie.<br><small>${e.message}</small>`);
+        }
     }
-    top3.forEach(m => grid.appendChild(renderCard(m)));
-    document.getElementById('topCount').textContent = `Best ${top3.length}`;
-
-  } catch (e) {
-    console.error(e);
-    renderError(grid, `cant upload movie.<br><small>${e.message}</small>`);
-  }
-}
 //-----------------------------------------
     async function loadAdminDashboard() {
         // Якщо немає токена або це не адмін - нічого не робимо
