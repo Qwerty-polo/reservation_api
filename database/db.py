@@ -8,7 +8,9 @@ from typing import Annotated
 load_dotenv()
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
-print(f"МОЄ ПОСИЛАННЯ: {DATABASE_URL}") # 👈 ДОДАЙ ЦЕЙ РЯДОК
+
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://", 1)
 
 class Base(DeclarativeBase):
     pass
